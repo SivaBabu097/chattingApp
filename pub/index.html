@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title> Chat.. </title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="master.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js" charset="utf-8"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" charset="utf-8"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.6/angular.min.js" charset="utf-8"></script>
+    <style media="screen">
+    .btn {
+      border-radius: 0;
+    }
+    .msg {
+    width: 400px;
+    margin: 0 auto;
+    border: solid 1px #ccc;
+    border-radius: 5px;
+    overflow: hidden;
+    }
+    .chat-container {
+    height: 400px;
+    overflow: auto;
+    transform: rotate(180deg);
+    direction: rtl;
+    }
+    .message {
+      border-bottom: solid 1px #ccc;
+      padding: 20px;
+      transform: rotate(180deg);
+      direction: ltr;
+    }
+      .avatar {
+        float: left;
+        margin-right: 5px;
+        width: 100%;
+        height: 100%;
+        max-width: 35px;
+    }
+      .datetime {
+        float: right;
+        color: #999;
+    }
+    .send-message-form
+    input {
+      width: 100%;
+      border: none;
+      font-size: 16px;
+      padding: 10px;
+    }
+    button {
+      display: none;
+    }
+
+    </style>
+  </head>
+  <body ng-app="">
+     <script src="/socket.io/socket.io.js">
+	 </script>
+   <div class="container msg">
+
+     <div class="chat-container">
+
+       <div class="message" id="output">
+
+         <img class="avatar" src="E:\SP\node\angle\copies\auth\public\app\views\images\defPic.jpg">
+         <div class="datetime">23/03/2016 20:40</div>
+         <p>A message text</p>
+       </div>
+     </div>
+     <div id="typing" style="color: red;">
+
+     </div>
+     <form class="send-message-form">
+       <input type="text" id="name" class="form-control" placeholder="Your Name:"/><br>
+ 	     <textarea id="msg" class="form-control" placeholder="type your msg.."></textarea><br>
+       <input type="button" class="btn btn-info" id="btn" value="send"/><br>
+     </form>
+   </div>
+
+	 <script>
+
+ var socket = io();
+
+ var u = document.getElementById('typing');
+ var v = document.getElementById('output');
+ var x = document.getElementById('name');
+ var y = document.getElementById('msg');
+ var z = document.getElementById('btn');
+
+           y.addEventListener('keypress', function() {
+               socket.emit('type', x.value);
+          });
+
+		   z.addEventListener('click', function() {
+           	   socket.emit('chat', {a : y.value,
+	                     b : x.value});
+			   y.value = "";
+         });
+     socket.on('chat', function(data) {
+	    u.innerHTML = "";
+	    v.innerHTML += data.b+"	:	"+data.a+"<br>";
+	 });
+
+	 socket.on('type', function(data) {
+	    u.innerHTML = data+"is typing....<br>";
+	 });
+
+	 </script>
+  </body>
+</html>
