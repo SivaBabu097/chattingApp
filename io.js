@@ -3,8 +3,6 @@ var app = express();
 var port = process.env.PORT || 3000;
 var sock = require('socket.io');
 
-app.use(express.static(__dirname + '/pub'));
-
 app.get('/', function(req,res) {
 	res.sendFile(__dirname+'/pub/index.html');
 });
